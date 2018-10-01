@@ -11,15 +11,15 @@ namespace TileMapEditor.MapThings
 
     public class Tile
     {
-        public Rectangle SourceRectangle { get; }
+        public Rectangle SourceRectangle { get; set; }
         public Rectangle CollisionRectangle { get; set; }
-        public TileType TileType { get; }
-        public bool IsGround { get; }
-        public bool IsSolid { get; }
-        public bool IsEmpty { get; }
-        public bool IsOneWay { get; }
+        public TileType TileType { get; set; }
+        public bool IsGround { get; set; }
+        public bool IsSolid { get; set; }
+        public bool IsEmpty { get; set; }
+        public bool IsOneWay { get; set; }
 
-        public Tile(TileType tileType, bool isGround, bool isSolid, bool isEmpty, bool isOneWay, Rectangle srcRect)
+        public Tile(TileType tileType, bool isGround, bool isSolid, bool isEmpty, bool isOneWay, Rectangle srcRect, Rectangle colRect)
         {
             TileType = tileType;
             IsGround = isGround;
@@ -27,6 +27,7 @@ namespace TileMapEditor.MapThings
             IsEmpty = IsEmpty;
             IsOneWay = isOneWay;
             SourceRectangle = srcRect;
+            CollisionRectangle = colRect;
         }
     }
 }

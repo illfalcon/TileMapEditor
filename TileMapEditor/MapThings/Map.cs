@@ -31,12 +31,6 @@ namespace TileMapEditor.MapThings
             _tileWidth = tileWidth;
             _tileHeight = tileHeight;
             _tileSet = tileSet;
-            CreateMap();
-        }
-
-        //more hardcoding
-        public void CreateMap()
-        {
             _tiles = new Tile[Width, Height];
         }
 

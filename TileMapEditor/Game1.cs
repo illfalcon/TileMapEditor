@@ -12,9 +12,25 @@ namespace TileMapEditor
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
 
+        RenderTarget2D mapTarget;
+        RenderTarget2D tileSetTarget;
+
+
+
         public Game1()
         {
-            graphics = new GraphicsDeviceManager(this);
+            // Set a display mode that is windowed but is the same as the desktop's current resolution (don't show a border)...
+            // This is done instead of using true fullscreen mode since some firewalls will crash the computer in true fullscreen mode
+            int initial_screen_width = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width - 15;
+            int initial_screen_height = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height - 80;
+            graphics = new GraphicsDeviceManager(this)
+            {
+                PreferredBackBufferWidth = initial_screen_width,
+                PreferredBackBufferHeight = initial_screen_height,
+                IsFullScreen = false,
+                PreferredDepthStencilFormat = DepthFormat.Depth16
+            };
+
             Content.RootDirectory = "Content";
         }
 
@@ -26,8 +42,12 @@ namespace TileMapEditor
         /// </summary>
         protected override void Initialize()
         {
-            // TODO: Add your initialization logic here
-
+            double mapFieldWidth = (GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width - 15) * 0.5;
+            double mapFieldHeight = (GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width - 80) * 0.5;
+            mapTarget = new RenderTarget2D(GraphicsDevice, (int)mapFieldWidth, (int)mapFieldHeight);
+            double tileSetFieldWidth = (GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width - 15) * 0.25;
+            double tileSetFieldHeight = (GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width - 80) * 0.5;
+            tileSetTarget = new RenderTarget2D(GraphicsDevice, (int)tileSetFieldWidth, (int)tileSetFieldHeight);
             base.Initialize();
         }
 

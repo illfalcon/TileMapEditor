@@ -46,7 +46,6 @@
     <Compile Include="MapThings\Camera.cs" />
     <Compile Include="MapThings\Map.cs" />
     <Compile Include="MapThings\Tile.cs" />
-    <Compile Include="MapThings\TileSet.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
