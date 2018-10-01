@@ -45,6 +45,8 @@ namespace TileMapEditor
         
         protected override void Initialize()
         {
+            IsMouseVisible = true;
+
             double mapFieldWidth = initial_screen_width * 0.5;
             double mapFieldHeight = initial_screen_height * 0.5;
             mapTarget = new RenderTarget2D(GraphicsDevice, (int)mapFieldWidth, (int)mapFieldHeight);
@@ -52,6 +54,12 @@ namespace TileMapEditor
             double tileSetFieldHeight = initial_screen_height * 0.5;
             tileSetTarget = new RenderTarget2D(GraphicsDevice, (int)tileSetFieldWidth, (int)tileSetFieldHeight);
             base.Initialize();
+        }
+        
+        public void CreateNewMapWindow()
+        {
+            var newMapWindow = new NewMapWindow();
+            newMapWindow.Show();
         }
 
         protected override void LoadContent()
@@ -63,7 +71,7 @@ namespace TileMapEditor
             Texture2D loadMapButton = Content.Load<Texture2D>("load");
 
             newMap = new Button(newMapButton, new Vector2(initial_screen_width / 8, initial_screen_height / 8 * 5));
-            //newMap.Click += 
+            newMap.Click += CreateNewMapWindow;
             //loadMap = new Button(loadMapButton, new Vector2(initial_screen_width / 8, initial_screen_height / 8 * 5));
             //saveMap = new Button(saveMapButton, new Vector2(initial_screen_width / 8, initial_screen_height / 8 * 5));
         }

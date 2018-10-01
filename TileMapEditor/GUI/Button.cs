@@ -31,10 +31,10 @@ namespace TileMapEditor.GUI
             MouseState mouseState = Mouse.GetState();
             Rectangle mousePos = new Rectangle(mouseState.Position.X, mouseState.Position.Y, 1, 1);
 
-            if (mousePos.Intersects(_collisionRectangle) && mouseState.LeftButton == ButtonState.Pressed && !_prevClicked)
+            if (mousePos.Intersects(_collisionRectangle) && mouseState.LeftButton == ButtonState.Pressed)
                 Click?.Invoke();
 
-            _prevClicked = _clicked;
+            //_prevClicked = _clicked;
         }
 
         public void Draw(SpriteBatch spriteBatch)
