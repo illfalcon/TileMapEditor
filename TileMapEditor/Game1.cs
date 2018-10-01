@@ -1,12 +1,10 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using TileMapEditor.GUI;
 
 namespace TileMapEditor
 {
-    /// <summary>
-    /// This is the main type for your game.
-    /// </summary>
     public class Game1 : Game
     {
         GraphicsDeviceManager graphics;
@@ -15,14 +13,19 @@ namespace TileMapEditor
         RenderTarget2D mapTarget;
         RenderTarget2D tileSetTarget;
 
+        int initial_screen_width = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width - 15;
+        int initial_screen_height = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height - 80;
 
+        Button newMap;
+        Button saveMap;
+        Button loadMap;
+        Button newTile;
 
         public Game1()
         {
             // Set a display mode that is windowed but is the same as the desktop's current resolution (don't show a border)...
             // This is done instead of using true fullscreen mode since some firewalls will crash the computer in true fullscreen mode
-            int initial_screen_width = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width - 15;
-            int initial_screen_height = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height - 80;
+            
             graphics = new GraphicsDeviceManager(this)
             {
                 PreferredBackBufferWidth = initial_screen_width,
@@ -33,34 +36,23 @@ namespace TileMapEditor
 
             Content.RootDirectory = "Content";
         }
-
-        /// <summary>
-        /// Allows the game to perform any initialization it needs to before starting to run.
-        /// This is where it can query for any required services and load any non-graphic
-        /// related content.  Calling base.Initialize will enumerate through any components
-        /// and initialize them as well.
-        /// </summary>
+        
         protected override void Initialize()
         {
-            double mapFieldWidth = (GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width - 15) * 0.5;
-            double mapFieldHeight = (GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width - 80) * 0.5;
+            double mapFieldWidth = initial_screen_width * 0.5;
+            double mapFieldHeight = initial_screen_height * 0.5;
             mapTarget = new RenderTarget2D(GraphicsDevice, (int)mapFieldWidth, (int)mapFieldHeight);
-            double tileSetFieldWidth = (GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width - 15) * 0.25;
-            double tileSetFieldHeight = (GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width - 80) * 0.5;
+            double tileSetFieldWidth = initial_screen_width * 0.25;
+            double tileSetFieldHeight = initial_screen_height * 0.5;
             tileSetTarget = new RenderTarget2D(GraphicsDevice, (int)tileSetFieldWidth, (int)tileSetFieldHeight);
             base.Initialize();
         }
 
-        /// <summary>
-        /// LoadContent will be called once per game and is the place to load
-        /// all of your content.
-        /// </summary>
         protected override void LoadContent()
         {
-            // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
-            // TODO: use this.Content to load your game content here
+            //Texture2D newMapButton = Content.Load<Texture2D>("");
         }
 
         /// <summary>
@@ -93,9 +85,18 @@ namespace TileMapEditor
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Draw(GameTime gameTime)
         {
+            GraphicsDevice.SetRenderTarget(mapTarget);
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
-            // TODO: Add your drawing code here
+            GraphicsDevice.SetRenderTarget(tileSetTarget);
+            GraphicsDevice.Clear(Color.BurlyWood);
+
+            GraphicsDevice.SetRenderTarget(null);
+
+            spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.Opaque, SamplerState.LinearWrap, DepthStencilState.None, RasterizerState.CullNone);
+            spriteBatch.Draw(mapTarget, new Vector2(initial_screen_width / 8, initial_screen_height / 8), Color.White);
+            spriteBatch.Draw(tileSetTarget, new Vector2(initial_screen_width / 8 * 5, initial_screen_height / 8), Color.White);
+            spriteBatch.End();
 
             base.Draw(gameTime);
         }
