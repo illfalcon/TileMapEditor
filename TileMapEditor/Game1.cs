@@ -1,7 +1,9 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using System;
 using TileMapEditor.GUI;
+using TileMapEditor.MapThings;
 
 namespace TileMapEditor
 {
@@ -13,6 +15,8 @@ namespace TileMapEditor
         RenderTarget2D mapTarget;
         RenderTarget2D tileSetTarget;
 
+        Map map;
+
         int initial_screen_width = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width - 15;
         int initial_screen_height = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height - 80;
 
@@ -20,6 +24,8 @@ namespace TileMapEditor
         Button saveMap;
         Button loadMap;
         Button newTile;
+
+       
 
         public Game1()
         {
@@ -52,50 +58,50 @@ namespace TileMapEditor
         {
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
-            //Texture2D newMapButton = Content.Load<Texture2D>("");
+            Texture2D newMapButton = Content.Load<Texture2D>("new");
+            Texture2D saveMapButton = Content.Load<Texture2D>("save");
+            Texture2D loadMapButton = Content.Load<Texture2D>("load");
+
+            newMap = new Button(newMapButton, new Vector2(initial_screen_width / 8, initial_screen_height / 8 * 5));
+            //newMap.Click += 
+            //loadMap = new Button(loadMapButton, new Vector2(initial_screen_width / 8, initial_screen_height / 8 * 5));
+            //saveMap = new Button(saveMapButton, new Vector2(initial_screen_width / 8, initial_screen_height / 8 * 5));
         }
 
-        /// <summary>
-        /// UnloadContent will be called once per game and is the place to unload
-        /// game-specific content.
-        /// </summary>
         protected override void UnloadContent()
         {
-            // TODO: Unload any non ContentManager content here
+
         }
 
-        /// <summary>
-        /// Allows the game to run logic such as updating the world,
-        /// checking for collisions, gathering input, and playing audio.
-        /// </summary>
-        /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Update(GameTime gameTime)
         {
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
-
-            // TODO: Add your update logic here
+            newMap.Update();
 
             base.Update(gameTime);
         }
 
-        /// <summary>
-        /// This is called when the game should draw itself.
-        /// </summary>
-        /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Draw(GameTime gameTime)
         {
             GraphicsDevice.SetRenderTarget(mapTarget);
             GraphicsDevice.Clear(Color.CornflowerBlue);
+            spriteBatch.Begin();
+            map?.Draw(spriteBatch);
+            spriteBatch.End();
+            
 
             GraphicsDevice.SetRenderTarget(tileSetTarget);
             GraphicsDevice.Clear(Color.BurlyWood);
 
             GraphicsDevice.SetRenderTarget(null);
 
+            GraphicsDevice.Clear(Color.FloralWhite);
+
             spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.Opaque, SamplerState.LinearWrap, DepthStencilState.None, RasterizerState.CullNone);
             spriteBatch.Draw(mapTarget, new Vector2(initial_screen_width / 8, initial_screen_height / 8), Color.White);
             spriteBatch.Draw(tileSetTarget, new Vector2(initial_screen_width / 8 * 5, initial_screen_height / 8), Color.White);
+            newMap.Draw(spriteBatch);
             spriteBatch.End();
 
             base.Draw(gameTime);

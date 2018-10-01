@@ -76,7 +76,7 @@ namespace TileMapEditor.MapThings
             {
                 for (int j = startRow; j < endRow; j++)
                 {
-                    //spriteBatch.Draw(_tileSet, new Rectangle((int)_tileWidth * (i - startCol) + (int)offset.X, (int)_tileHeight * (j - startRow) + (int)offset.Y, _tileWidth, _tileHeight), _tiles[i, j].SourceRectangle, Color.White);
+                    spriteBatch.Draw(_tileSet, new Rectangle((int)_tileWidth * (i - startCol) + (int)offset.X, (int)_tileHeight * (j - startRow) + (int)offset.Y, _tileWidth, _tileHeight), _tiles[i, j].SourceRectangle, Color.White);
                 }
             }
         }

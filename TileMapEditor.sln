@@ -5,8 +5,6 @@ VisualStudioVersion = 15.0.28010.2026
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TileMapEditor", "TileMapEditor\TileMapEditor.csproj", "{7722A02E-2A93-4B9D-B28D-A86E66983993}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TileMapEditorWindows", "TileMapEditorWindows\TileMapEditorWindows.csproj", "{FB287E18-6053-48B0-A547-06EC5864A03F}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,14 +19,6 @@ Global
 		{7722A02E-2A93-4B9D-B28D-A86E66983993}.Release|Any CPU.ActiveCfg = Release|x86
 		{7722A02E-2A93-4B9D-B28D-A86E66983993}.Release|x86.ActiveCfg = Release|x86
 		{7722A02E-2A93-4B9D-B28D-A86E66983993}.Release|x86.Build.0 = Release|x86
-		{FB287E18-6053-48B0-A547-06EC5864A03F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{FB287E18-6053-48B0-A547-06EC5864A03F}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{FB287E18-6053-48B0-A547-06EC5864A03F}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{FB287E18-6053-48B0-A547-06EC5864A03F}.Debug|x86.Build.0 = Debug|Any CPU
-		{FB287E18-6053-48B0-A547-06EC5864A03F}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{FB287E18-6053-48B0-A547-06EC5864A03F}.Release|Any CPU.Build.0 = Release|Any CPU
-		{FB287E18-6053-48B0-A547-06EC5864A03F}.Release|x86.ActiveCfg = Release|Any CPU
-		{FB287E18-6053-48B0-A547-06EC5864A03F}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
