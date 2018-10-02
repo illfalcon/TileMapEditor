@@ -17,8 +17,8 @@ namespace TileMapEditor
 
         Map map;
 
-        int initial_screen_width = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width - 15;
-        int initial_screen_height = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height - 80;
+        public static int initial_screen_width = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width - 15;
+        public static int initial_screen_height = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height - 80;
 
         Button newMap;
         Button saveMap;
@@ -46,7 +46,7 @@ namespace TileMapEditor
         protected override void Initialize()
         {
             IsMouseVisible = true;
-
+            Window.IsBorderless = true;
             double mapFieldWidth = initial_screen_width * 0.5;
             double mapFieldHeight = initial_screen_height * 0.5;
             mapTarget = new RenderTarget2D(GraphicsDevice, (int)mapFieldWidth, (int)mapFieldHeight);
@@ -95,7 +95,7 @@ namespace TileMapEditor
             GraphicsDevice.SetRenderTarget(mapTarget);
             GraphicsDevice.Clear(Color.CornflowerBlue);
             spriteBatch.Begin();
-            map?.Draw(spriteBatch);
+            //map?.Draw(spriteBatch);
             spriteBatch.End();
             
 
