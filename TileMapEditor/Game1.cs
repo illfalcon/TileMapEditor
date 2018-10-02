@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System;
 using TileMapEditor.GUI;
+using TileMapEditor.Helpers;
 using TileMapEditor.MapThings;
 
 namespace TileMapEditor
@@ -12,26 +13,13 @@ namespace TileMapEditor
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
 
-        //RenderTarget2D mapTarget;
-        //RenderTarget2D tileSetTarget;
-
-        //Map map;
-        //
-        //public static int initial_screen_width = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width - 15;
-        //public static int initial_screen_height = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height - 80;
-
         Button newMap;
         Button saveMap;
         Button loadMap;
         Button newTile;
 
-       
-
         public Game1()
         {
-            // Set a display mode that is windowed but is the same as the desktop's current resolution (don't show a border)...
-            // This is done instead of using true fullscreen mode since some firewalls will crash the computer in true fullscreen mode
-
             graphics = new GraphicsDeviceManager(this);
 
             Content.RootDirectory = "Content";
@@ -41,16 +29,29 @@ namespace TileMapEditor
         {
             IsMouseVisible = true;
             graphics.PreferredBackBufferWidth = 800;
-            graphics.PreferredBackBufferHeight = 700;
+            graphics.PreferredBackBufferHeight = 650;
             graphics.ApplyChanges();
+            Globals.ClientBounds = new Vector2(Window.ClientBounds.Width, Window.ClientBounds.Height);
             base.Initialize();
         }
         
-        public void CreateNewMapWindow()
-        {
-            var newMapWindow = new NewMapWindow();
-            newMapWindow.Show();
-        }
+        //public void CreateNewMapWindow()
+        //{
+        //    var newMapWindow = new NewMapWindow();
+        //    newMapWindow.Show();
+        //}
+        //
+        //public void LoadMapWindow()
+        //{
+        //    var loadMapWindow = new LoadMapWindow();
+        //    loadMapWindow.Show();
+        //}
+        //
+        //public void SaveMapWindow()
+        //{
+        //    var saveMapWindow = new SaveMapWindow();
+        //    saveMapWindow.Show();
+        //}
 
         protected override void LoadContent()
         {
@@ -60,10 +61,12 @@ namespace TileMapEditor
             Texture2D saveMapButton = Content.Load<Texture2D>("save");
             Texture2D loadMapButton = Content.Load<Texture2D>("load");
 
-            //newMap = new Button(newMapButton, new Vector2(initial_screen_width / 8, initial_screen_height / 8 * 5));
+            newMap = new Button(newMapButton, new Vector2(20, Globals.ClientBounds.Y - newMapButton.Height));
+            loadMap = new Button(loadMapButton, new Vector2(130, Globals.ClientBounds.Y - loadMapButton.Height));
+            saveMap = new Button(saveMapButton, new Vector2(240, Globals.ClientBounds.Y - saveMapButton.Height));
             //newMap.Click += CreateNewMapWindow;
-            //loadMap = new Button(loadMapButton, new Vector2(initial_screen_width / 8, initial_screen_height / 8 * 5));
-            //saveMap = new Button(saveMapButton, new Vector2(initial_screen_width / 8, initial_screen_height / 8 * 5));
+            //loadMap.Click += LoadMapWindow;
+            //saveMap.Click += SaveMapWindow;
         }
 
         protected override void UnloadContent()
@@ -75,8 +78,9 @@ namespace TileMapEditor
         {
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
-            //newMap.Update();
-
+            newMap.Update();
+            loadMap.Update();
+            saveMap.Update();
             base.Update(gameTime);
         }
 
@@ -86,7 +90,9 @@ namespace TileMapEditor
             GraphicsDevice.Clear(Color.FloralWhite);
 
             spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.Opaque, SamplerState.LinearWrap, DepthStencilState.None, RasterizerState.CullNone);
-            //newMap.Draw(spriteBatch);
+            newMap.Draw(spriteBatch);
+            loadMap.Draw(spriteBatch);
+            saveMap.Draw(spriteBatch);
             spriteBatch.End();
 
             base.Draw(gameTime);
