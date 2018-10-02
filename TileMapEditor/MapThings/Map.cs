@@ -15,15 +15,18 @@ namespace TileMapEditor.MapThings
         private int _height;
         private int _tileWidth;
         private int _tileHeight;
-        private Texture2D _tileSet;
+        private Texture2D _tileSheet;
         private Tile[,] _tiles;
+        private Tile _emptyTile;
+        private List<Rectangle> _tileSet;
 
         public int Width { get { return _width; } } //in tiles
         public int Height { get { return _height; } } // in tiles
         public int TileWidth { get { return _tileWidth; } }
         public int TileHeight { get { return _tileHeight; } }
         public Tile[,] Tiles { get { return _tiles; } }
-        public Texture2D TileSet { get { return _tileSet; } }
+        public Texture2D TileSheet { get { return _tileSheet; } }
+        public List<Rectangle> TileSet { get { return _tileSet; } }
 
         public void Initialize(int width, int height, int tileWidth, int tileHeight, Texture2D tileSet)
         {
@@ -31,16 +34,52 @@ namespace TileMapEditor.MapThings
             _height = height;
             _tileWidth = tileWidth;
             _tileHeight = tileHeight;
-            _tileSet = tileSet;
+            _tileSheet = tileSet;
             _tiles = new Tile[Width, Height];
+            _emptyTile = new Tile(tileType: TileType.Empty, isGround: false, isSolid: false, isEmpty: true, isOneWay: false, srcRect: Rectangle.Empty, colRect: Rectangle.Empty);
+            for (int i = 0; i <= Width; i++)
+            {
+                for (int j = 0; j <= Height; j++)
+                {
+                    _tiles[i, j] = _emptyTile;
+                }
+            }
         }
 
-        private Vector2 CalculateMousePosition(MouseState mouse)
+        public void SetTile()
         {
-            Vector2 fieldOffset = new Vector2(Game1.initial_screen_width / 8 * 5, Game1.initial_screen_height / 8);
-            float scale = (float)Camera.Height / Game1.initial_screen_height;
-            Vector2 mousePosition = (mouse.Position.ToVector2() - fieldOffset) * scale + Camera.Position;
-            return mousePosition;
+            Vector2 mouse;
+            int mapMouseX;
+            int mapMouseY;
+        }
+
+        public void UpdateCamera()
+        {
+            KeyboardState keys = Keyboard.GetState();
+            if (keys.IsKeyDown(Keys.W))
+                Camera.Position = new Vector2(Camera.Position.X, Camera.Position.Y - 5);
+            if (keys.IsKeyDown(Keys.S))
+                Camera.Position = new Vector2(Camera.Position.X, Camera.Position.Y + 5);
+            if (keys.IsKeyDown(Keys.A))
+                Camera.Position = new Vector2(Camera.Position.X - 5, Camera.Position.Y);
+            if (keys.IsKeyDown(Keys.D))
+                Camera.Position = new Vector2(Camera.Position.X + 5, Camera.Position.Y);
+            if (Camera.Position.X < Camera.MinX)
+            {
+                Camera.Position.X = Camera.MinX;
+            }
+            if (Camera.Position.X > Camera.MaxX)
+            {
+                Camera.Position.X = Camera.MaxX;
+            }
+            if (Camera.Position.Y < Camera.MinY)
+            {
+                Camera.Position.Y = Camera.MinY;
+            }
+            if (Camera.Position.Y > Camera.MaxY)
+            {
+                Camera.Position.Y = Camera.MaxY;
+            }
         }
 
         //public Vector2 GetTileFromCoordinates(float wX, float wY)
@@ -66,7 +105,7 @@ namespace TileMapEditor.MapThings
         //{
         //    return Tiles[(int)coords.X, (int)coords.Y];
         //}
-        //
+        
         //public void Draw(SpriteBatch spriteBatch)
         //{
         //    int startCol = (int)GetTileFromCoordinates(Camera.Position.X, Camera.Position.Y).X;
@@ -85,7 +124,7 @@ namespace TileMapEditor.MapThings
         //    {
         //        for (int j = startRow; j < endRow; j++)
         //        {
-        //            spriteBatch.Draw(_tileSet, new Rectangle((int)_tileWidth * (i - startCol) + (int)offset.X, (int)_tileHeight * (j - startRow) + (int)offset.Y, _tileWidth, _tileHeight), _tiles[i, j].SourceRectangle, Color.White);
+        //            spriteBatch.Draw(_tileSheet, new Rectangle((int)_tileWidth * (i - startCol) + (int)offset.X, (int)_tileHeight * (j - startRow) + (int)offset.Y, _tileWidth, _tileHeight), _tiles[i, j].SourceRectangle, Color.White);
         //        }
         //    }
         //}
