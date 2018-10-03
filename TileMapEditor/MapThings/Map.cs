@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TileMapEditor.Helpers;
 
 namespace TileMapEditor.MapThings
 {
@@ -46,12 +47,38 @@ namespace TileMapEditor.MapThings
             }
         }
 
-        public void SetTile()
+        public void SetTile(Tile tile)
         {
             Vector2 mouse;
             int mapMouseX;
             int mapMouseY;
+
+            MouseState curMouseState = Mouse.GetState();
+
+            if (curMouseState.LeftButton == ButtonState.Pressed)
+            {
+                mouse = new Vector2(curMouseState.X, curMouseState.Y) + Camera.Position;
+                mapMouseX = (int)GetTileFromCoordinates(mouse.X, mouse.Y).X;
+                mapMouseY = (int)GetTileFromCoordinates(mouse.X, mouse.Y).Y;
+                if (mapMouseX < Width && mapMouseY < Height && mapMouseX >= 0 && mapMouseY >= 0)
+                {
+                    Tiles[mapMouseX, mapMouseY] = tile;
+                }
+            }
+
+            if (curMouseState.RightButton == ButtonState.Pressed)
+            {
+                mouse = new Vector2(curMouseState.X, curMouseState.Y) + Camera.Position;
+                mapMouseX = (int)GetTileFromCoordinates(mouse.X, mouse.Y).X;
+                mapMouseY = (int)GetTileFromCoordinates(mouse.X, mouse.Y).Y;
+                if (mapMouseX < Width && mapMouseY < Height && mapMouseX >= 0 && mapMouseY >= 0)
+                {
+                    Tiles[mapMouseX, mapMouseY] = _emptyTile;
+                }
+            }
         }
+
+        //TODO: implement Save() and Load()
 
         public void UpdateCamera()
         {
@@ -82,20 +109,39 @@ namespace TileMapEditor.MapThings
             }
         }
 
-        //public Vector2 GetTileFromCoordinates(float wX, float wY)
-        //{
-        //    int mX = (int)(wX / _tileWidth);
-        //    int mY = (int)(wY / _tileHeight);
-        //    return new Vector2(mX, mY);
-        //}
-        //
-        //public Vector2 GetCoordinatesFromTile(int mX, int mY)
-        //{
-        //    float wX = mX * _tileWidth;
-        //    float wY = mY * _tileHeight;
-        //    return new Vector2(wX, wY);
-        //}
-        //
+        public Vector2 GetTileFromCoordinates(float wX, float wY)
+        {
+            int mX = (int)(wX / _tileWidth);
+            int mY = (int)(wY / _tileHeight);
+            return new Vector2(mX, mY);
+        }
+        
+        public Vector2 GetCoordinatesFromTile(int mX, int mY)
+        {
+            float wX = mX * _tileWidth;
+            float wY = mY * _tileHeight;
+            return new Vector2(wX, wY);
+        }
+
+        public void LoadTileSet(Texture2D tileSheet)
+        {
+            int tilesWide = tileSheet.Width / _tileWidth;
+            int tilesHigh = tileSheet.Height / _tileHeight;
+
+            Rectangle bounds;
+
+            _tileSet = new List<Rectangle>();
+
+            for (int i = 0; i < tilesWide; i++)
+            {
+                for (int j = 0; j < tilesHigh; j++)
+                {
+                    bounds = new Rectangle(i * _tileWidth, j * _tileHeight, _tileWidth, _tileHeight);
+                    _tileSet.Add(bounds);
+                }
+            }
+        }
+        
         //public Tile GetTile(int x, int y)
         //{
         //    return Tiles[x, y];
@@ -106,27 +152,27 @@ namespace TileMapEditor.MapThings
         //    return Tiles[(int)coords.X, (int)coords.Y];
         //}
         
-        //public void Draw(SpriteBatch spriteBatch)
-        //{
-        //    int startCol = (int)GetTileFromCoordinates(Camera.Position.X, Camera.Position.Y).X;
-        //    int startRow = (int)GetTileFromCoordinates(Camera.Position.X, Camera.Position.Y).Y;
-        //    int endCol = (int)GetTileFromCoordinates(Camera.Position.X + Camera.Width, Camera.Position.Y).X;
-        //    int endRow = (int)GetTileFromCoordinates(Camera.Position.X, Camera.Position.Y + Camera.Height).Y;
-        //
-        //    if (endCol != _width)
-        //        endCol += 1;
-        //    if (endRow != _height)
-        //        endRow += 1;
-        //
-        //    Vector2 offset = new Vector2(GetCoordinatesFromTile(startCol, startRow).X - Camera.Position.X, GetCoordinatesFromTile(startCol, startRow).Y - Camera.Position.Y);
-        //
-        //    for (int i = startCol; i < endCol; i++)
-        //    {
-        //        for (int j = startRow; j < endRow; j++)
-        //        {
-        //            spriteBatch.Draw(_tileSheet, new Rectangle((int)_tileWidth * (i - startCol) + (int)offset.X, (int)_tileHeight * (j - startRow) + (int)offset.Y, _tileWidth, _tileHeight), _tiles[i, j].SourceRectangle, Color.White);
-        //        }
-        //    }
-        //}
+        public void Draw(SpriteBatch spriteBatch)
+        {
+            int startCol = (int)GetTileFromCoordinates(Camera.Position.X, Camera.Position.Y).X;
+            int startRow = (int)GetTileFromCoordinates(Camera.Position.X, Camera.Position.Y).Y;
+            int endCol = (int)GetTileFromCoordinates(Camera.Position.X + Camera.Width, Camera.Position.Y).X;
+            int endRow = (int)GetTileFromCoordinates(Camera.Position.X, Camera.Position.Y + Camera.Height).Y;
+        
+            if (endCol != _width)
+                endCol += 1;
+            if (endRow != _height)
+                endRow += 1;
+        
+            Vector2 offset = new Vector2(GetCoordinatesFromTile(startCol, startRow).X - Camera.Position.X, GetCoordinatesFromTile(startCol, startRow).Y - Camera.Position.Y);
+        
+            for (int i = startCol; i < endCol; i++)
+            {
+                for (int j = startRow; j < endRow; j++)
+                {
+                    spriteBatch.Draw(_tileSheet, new Rectangle((int)_tileWidth * (i - startCol) + (int)offset.X, (int)_tileHeight * (j - startRow) + (int)offset.Y, _tileWidth, _tileHeight), _tiles[i, j].SourceRectangle, Color.White);
+                }
+            }
+        }
     }
 }

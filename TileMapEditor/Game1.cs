@@ -29,9 +29,10 @@ namespace TileMapEditor
         {
             IsMouseVisible = true;
             graphics.PreferredBackBufferWidth = 800;
-            graphics.PreferredBackBufferHeight = 650;
+            graphics.PreferredBackBufferHeight = 600;
             graphics.ApplyChanges();
             Globals.ClientBounds = new Vector2(Window.ClientBounds.Width, Window.ClientBounds.Height);
+            Globals.DrawOffset = Vector2.Zero;
             base.Initialize();
         }
         
