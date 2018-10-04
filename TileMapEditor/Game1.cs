@@ -8,10 +8,26 @@ using TileMapEditor.MapThings;
 
 namespace TileMapEditor
 {
+    public enum GameState { Active, Frozen }
+
     public class Game1 : Game
     {
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
+        GameState state;
+        Map map;
+
+        //public static int mapHeight = 14;
+        //public static int mapWidth = 100;
+        //public static int tileHeight = 16;
+        //public static int tileWidth = 16;
+
+        public static int selectedTileNo = 1;
+
+        public static Texture2D tileSheet;
+
+        MouseState mouse;
+        KeyboardState prevState;
 
         Button newMap;
         Button saveMap;
@@ -33,6 +49,8 @@ namespace TileMapEditor
             graphics.ApplyChanges();
             Globals.ClientBounds = new Vector2(Window.ClientBounds.Width, Window.ClientBounds.Height);
             Globals.DrawOffset = Vector2.Zero;
+            state = GameState.Active;
+            map = new Map();
             base.Initialize();
         }
         
@@ -61,6 +79,8 @@ namespace TileMapEditor
             Texture2D newMapButton = Content.Load<Texture2D>("new");
             Texture2D saveMapButton = Content.Load<Texture2D>("save");
             Texture2D loadMapButton = Content.Load<Texture2D>("load");
+            Texture2D tileSheetTexture = Content.Load<Texture2D>("jungletileset");
+            map.Initialize(50, 14, 16, 16, tileSheetTexture);
 
             newMap = new Button(newMapButton, new Vector2(20, Globals.ClientBounds.Y - newMapButton.Height));
             loadMap = new Button(loadMapButton, new Vector2(130, Globals.ClientBounds.Y - loadMapButton.Height));
@@ -79,6 +99,29 @@ namespace TileMapEditor
         {
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
+
+            KeyboardState keyState = Keyboard.GetState();
+
+            if (selectedTileNo < map.TileManager.Tiles.Length - 1)
+            {
+                if (keyState.IsKeyDown(Keys.Up) && !prevState.IsKeyDown(Keys.Up))
+                    selectedTileNo++;
+            }
+            if (selectedTileNo > 1)
+            {
+                if (keyState.IsKeyDown(Keys.Down) && !prevState.IsKeyDown(Keys.Down))
+                    selectedTileNo--;
+            }
+
+            prevState = keyState;
+
+            if (state == GameState.Active)
+            {
+                map.SetTile(map.TileManager.Tiles[selectedTileNo]);
+            }
+
+            map.UpdateCamera();
+
             newMap.Update();
             loadMap.Update();
             saveMap.Update();
@@ -91,6 +134,7 @@ namespace TileMapEditor
             GraphicsDevice.Clear(Color.FloralWhite);
 
             spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.Opaque, SamplerState.LinearWrap, DepthStencilState.None, RasterizerState.CullNone);
+            map.Draw(spriteBatch);
             newMap.Draw(spriteBatch);
             loadMap.Draw(spriteBatch);
             saveMap.Draw(spriteBatch);

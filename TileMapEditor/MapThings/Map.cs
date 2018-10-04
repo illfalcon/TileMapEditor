@@ -20,6 +20,7 @@ namespace TileMapEditor.MapThings
         private Tile[,] _tiles;
         private Tile _emptyTile;
         private List<Rectangle> _tileSet;
+        private TileManager _tileManager;
 
         public int Width { get { return _width; } } //in tiles
         public int Height { get { return _height; } } // in tiles
@@ -28,6 +29,7 @@ namespace TileMapEditor.MapThings
         public Tile[,] Tiles { get { return _tiles; } }
         public Texture2D TileSheet { get { return _tileSheet; } }
         public List<Rectangle> TileSet { get { return _tileSet; } }
+        public TileManager TileManager { get { return _tileManager; } }
 
         public void Initialize(int width, int height, int tileWidth, int tileHeight, Texture2D tileSet)
         {
@@ -37,12 +39,12 @@ namespace TileMapEditor.MapThings
             _tileHeight = tileHeight;
             _tileSheet = tileSet;
             _tiles = new Tile[Width, Height];
-            _emptyTile = new Tile(tileType: TileType.Empty, isGround: false, isSolid: false, isEmpty: true, isOneWay: false, srcRect: Rectangle.Empty, colRect: Rectangle.Empty);
-            for (int i = 0; i <= Width; i++)
+            _tileManager = new TileManager();
+            for (int i = 0; i < Width; i++)
             {
-                for (int j = 0; j <= Height; j++)
+                for (int j = 0; j < Height; j++)
                 {
-                    _tiles[i, j] = _emptyTile;
+                    _tiles[i, j] = _tileManager.Tiles[0];
                 }
             }
         }
@@ -73,7 +75,7 @@ namespace TileMapEditor.MapThings
                 mapMouseY = (int)GetTileFromCoordinates(mouse.X, mouse.Y).Y;
                 if (mapMouseX < Width && mapMouseY < Height && mapMouseX >= 0 && mapMouseY >= 0)
                 {
-                    Tiles[mapMouseX, mapMouseY] = _emptyTile;
+                    Tiles[mapMouseX, mapMouseY] = _tileManager.Tiles[0];
                 }
             }
         }
@@ -84,29 +86,29 @@ namespace TileMapEditor.MapThings
         {
             KeyboardState keys = Keyboard.GetState();
             if (keys.IsKeyDown(Keys.W))
-                Camera.Position = new Vector2(Camera.Position.X, Camera.Position.Y - 5);
+                Camera.Position = new Vector2(Camera.Position.X, Camera.Position.Y - 1);
             if (keys.IsKeyDown(Keys.S))
-                Camera.Position = new Vector2(Camera.Position.X, Camera.Position.Y + 5);
+                Camera.Position = new Vector2(Camera.Position.X, Camera.Position.Y + 1);
             if (keys.IsKeyDown(Keys.A))
-                Camera.Position = new Vector2(Camera.Position.X - 5, Camera.Position.Y);
+                Camera.Position = new Vector2(Camera.Position.X - 1, Camera.Position.Y);
             if (keys.IsKeyDown(Keys.D))
-                Camera.Position = new Vector2(Camera.Position.X + 5, Camera.Position.Y);
-            if (Camera.Position.X < Camera.MinX)
-            {
-                Camera.Position.X = Camera.MinX;
-            }
-            if (Camera.Position.X > Camera.MaxX)
-            {
-                Camera.Position.X = Camera.MaxX;
-            }
-            if (Camera.Position.Y < Camera.MinY)
-            {
-                Camera.Position.Y = Camera.MinY;
-            }
-            if (Camera.Position.Y > Camera.MaxY)
-            {
-                Camera.Position.Y = Camera.MaxY;
-            }
+                Camera.Position = new Vector2(Camera.Position.X + 1, Camera.Position.Y);
+            //if (Camera.Position.X < Camera.MinX)
+            //{
+            //    Camera.Position.X = Camera.MinX;
+            //}
+            //if (Camera.Position.X > Camera.MaxX)
+            //{
+            //    Camera.Position.X = Camera.MaxX;
+            //}
+            //if (Camera.Position.Y < Camera.MinY)
+            //{
+            //    Camera.Position.Y = Camera.MinY;
+            //}
+            //if (Camera.Position.Y > Camera.MaxY)
+            //{
+            //    Camera.Position.Y = Camera.MaxY;
+            //}
         }
 
         public Vector2 GetTileFromCoordinates(float wX, float wY)
@@ -154,23 +156,23 @@ namespace TileMapEditor.MapThings
         
         public void Draw(SpriteBatch spriteBatch)
         {
-            int startCol = (int)GetTileFromCoordinates(Camera.Position.X, Camera.Position.Y).X;
-            int startRow = (int)GetTileFromCoordinates(Camera.Position.X, Camera.Position.Y).Y;
-            int endCol = (int)GetTileFromCoordinates(Camera.Position.X + Camera.Width, Camera.Position.Y).X;
-            int endRow = (int)GetTileFromCoordinates(Camera.Position.X, Camera.Position.Y + Camera.Height).Y;
+            //int startCol = (int)GetTileFromCoordinates(Camera.Position.X, Camera.Position.Y).X;
+            //int startRow = (int)GetTileFromCoordinates(Camera.Position.X, Camera.Position.Y).Y;
+            //int endCol = (int)GetTileFromCoordinates(Camera.Position.X + Camera.Width, Camera.Position.Y).X;
+            //int endRow = (int)GetTileFromCoordinates(Camera.Position.X, Camera.Position.Y + Camera.Height).Y;
+            //
+            //if (endCol != _width)
+            //    endCol += 1;
+            //if (endRow != _height)
+            //    endRow += 1;
         
-            if (endCol != _width)
-                endCol += 1;
-            if (endRow != _height)
-                endRow += 1;
+            Vector2 offset = new Vector2( - Camera.Position.X, - Camera.Position.Y);
         
-            Vector2 offset = new Vector2(GetCoordinatesFromTile(startCol, startRow).X - Camera.Position.X, GetCoordinatesFromTile(startCol, startRow).Y - Camera.Position.Y);
-        
-            for (int i = startCol; i < endCol; i++)
+            for (int i = 0; i < Width; i++)
             {
-                for (int j = startRow; j < endRow; j++)
+                for (int j = 0; j < Height; j++)
                 {
-                    spriteBatch.Draw(_tileSheet, new Rectangle((int)_tileWidth * (i - startCol) + (int)offset.X, (int)_tileHeight * (j - startRow) + (int)offset.Y, _tileWidth, _tileHeight), _tiles[i, j].SourceRectangle, Color.White);
+                    spriteBatch.Draw(_tileSheet, new Rectangle((int)_tileWidth * i + (int)offset.X, (int)_tileHeight * j + (int)offset.Y, _tileWidth, _tileHeight), _tiles[i, j].SourceRectangle, Color.White);
                 }
             }
         }
