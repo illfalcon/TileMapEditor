@@ -18,7 +18,8 @@ namespace TileMapEditor.MapThings
         private int _tileHeight;
         private Texture2D _tileSheet;
         private Tile[,] _tiles;
-        private Tile _emptyTile;
+        private Texture2D _solid;
+        private Texture2D _empty;
         private List<Rectangle> _tileSet;
         private TileManager _tileManager;
 
@@ -31,7 +32,7 @@ namespace TileMapEditor.MapThings
         public List<Rectangle> TileSet { get { return _tileSet; } }
         public TileManager TileManager { get { return _tileManager; } }
 
-        public void Initialize(int width, int height, int tileWidth, int tileHeight, Texture2D tileSet)
+        public void Initialize(int width, int height, int tileWidth, int tileHeight, Texture2D tileSet, Texture2D solid, Texture2D empty)
         {
             _width = width;
             _height = height;
@@ -39,6 +40,8 @@ namespace TileMapEditor.MapThings
             _tileHeight = tileHeight;
             _tileSheet = tileSet;
             _tiles = new Tile[Width, Height];
+            _solid = solid;
+            _empty = empty;
             _tileManager = new TileManager();
             for (int i = 0; i < Width; i++)
             {
@@ -172,7 +175,19 @@ namespace TileMapEditor.MapThings
             {
                 for (int j = 0; j < Height; j++)
                 {
-                    spriteBatch.Draw(_tileSheet, new Rectangle((int)_tileWidth * i + (int)offset.X, (int)_tileHeight * j + (int)offset.Y, _tileWidth, _tileHeight), _tiles[i, j].SourceRectangle, Color.White);
+                    if (_tiles[i, j].IsEmpty)
+                    {
+                        spriteBatch.Draw(_empty, new Rectangle((int)_tileWidth * i + (int)offset.X, (int)_tileHeight * j + (int)offset.Y, _tileWidth, _tileHeight), Color.White);
+                    }
+                    else
+                    {
+                        spriteBatch.Draw(_tileSheet, new Rectangle((int)_tileWidth * i + (int)offset.X, (int)_tileHeight * j + (int)offset.Y, _tileWidth, _tileHeight), _tiles[i, j].SourceRectangle, Color.White);
+                        if (!_tiles[i, j].CollisionRectangle.IsEmpty)
+                            spriteBatch.Draw(_solid, new Rectangle(_tileWidth * i + (int)offset.X + _tiles[i, j].CollisionRectangle.X,
+                                _tileHeight * j + (int)offset.Y + _tiles[i, j].CollisionRectangle.Y,
+                                _tiles[i, j].CollisionRectangle.Width,
+                                _tiles[i, j].CollisionRectangle.Height), new Color(255, 255, 255, 50));
+                    }
                 }
             }
         }

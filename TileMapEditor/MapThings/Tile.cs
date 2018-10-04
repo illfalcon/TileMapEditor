@@ -24,7 +24,7 @@ namespace TileMapEditor.MapThings
             TileType = tileType;
             IsGround = isGround;
             IsSolid = isSolid;
-            IsEmpty = IsEmpty;
+            IsEmpty = isEmpty;
             IsOneWay = isOneWay;
             SourceRectangle = srcRect;
             CollisionRectangle = colRect;

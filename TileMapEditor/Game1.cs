@@ -80,7 +80,7 @@ namespace TileMapEditor
             Texture2D saveMapButton = Content.Load<Texture2D>("save");
             Texture2D loadMapButton = Content.Load<Texture2D>("load");
             Texture2D tileSheetTexture = Content.Load<Texture2D>("jungletileset");
-            map.Initialize(50, 14, 16, 16, tileSheetTexture);
+            map.Initialize(50, 14, 16, 16, tileSheetTexture, loadMapButton, newMapButton);
 
             newMap = new Button(newMapButton, new Vector2(20, Globals.ClientBounds.Y - newMapButton.Height));
             loadMap = new Button(loadMapButton, new Vector2(130, Globals.ClientBounds.Y - loadMapButton.Height));
@@ -115,7 +115,7 @@ namespace TileMapEditor
 
             prevState = keyState;
 
-            if (state == GameState.Active)
+            if (state == GameState.Active && map.TileSheet != null)
             {
                 map.SetTile(map.TileManager.Tiles[selectedTileNo]);
             }
@@ -133,7 +133,7 @@ namespace TileMapEditor
             
             GraphicsDevice.Clear(Color.FloralWhite);
 
-            spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.Opaque, SamplerState.LinearWrap, DepthStencilState.None, RasterizerState.CullNone);
+            spriteBatch.Begin();
             map.Draw(spriteBatch);
             newMap.Draw(spriteBatch);
             loadMap.Draw(spriteBatch);

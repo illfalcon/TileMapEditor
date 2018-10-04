@@ -19,7 +19,7 @@ namespace TileMapEditor.MapThings
             //0 empty
             _tiles.Add(new Tile(tileType: TileType.Empty, isGround: false, isSolid: false, isEmpty: true, isOneWay: false, srcRect: Rectangle.Empty, colRect: Rectangle.Empty));
             //1 grass
-            _tiles.Add(new Tile(TileType.Grass, true, true, false, false, new Rectangle(0, 192, 16, 16), new Rectangle(0, 0, 16, 16)));
+            _tiles.Add(new Tile(TileType.Grass, true, true, false, false, new Rectangle(0, 192, 16, 16), new Rectangle(0, 4, 16, 12)));
             //2 grass
             _tiles.Add(new Tile(TileType.Grass, true, true, false, false, new Rectangle(16, 192, 16, 16), new Rectangle(0, 0, 16, 16)));
             ////3 grass
