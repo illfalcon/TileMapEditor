@@ -104,32 +104,36 @@ namespace TileMapEditor
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
 
-            KeyboardState keyState = Keyboard.GetState();
-
-            if (selectedTileNo < map.TileManager.Tiles.Length - 1)
+            if (state == GameState.Active)
             {
-                if (keyState.IsKeyDown(Keys.Up) && !prevState.IsKeyDown(Keys.Up))
-                    selectedTileNo++;
+
+                KeyboardState keyState = Keyboard.GetState();
+
+                if (selectedTileNo < map.TileManager.Tiles.Length - 1)
+                {
+                    if (keyState.IsKeyDown(Keys.Up) && !prevState.IsKeyDown(Keys.Up))
+                        selectedTileNo++;
+                }
+                if (selectedTileNo > 1)
+                {
+                    if (keyState.IsKeyDown(Keys.Down) && !prevState.IsKeyDown(Keys.Down))
+                        selectedTileNo--;
+                }
+
+                prevState = keyState;
+
+                if (state == GameState.Active && map.TileSheet != null)
+                {
+                    map.SetTile(map.TileManager.Tiles[selectedTileNo]);
+                }
+
+                map.UpdateCamera();
+                tileSet.Update();
+
+                newMap.Update();
+                loadMap.Update();
+                saveMap.Update();
             }
-            if (selectedTileNo > 1)
-            {
-                if (keyState.IsKeyDown(Keys.Down) && !prevState.IsKeyDown(Keys.Down))
-                    selectedTileNo--;
-            }
-
-            prevState = keyState;
-
-            if (state == GameState.Active && map.TileSheet != null)
-            {
-                map.SetTile(map.TileManager.Tiles[selectedTileNo]);
-            }
-
-            map.UpdateCamera();
-            tileSet.Update();
-
-            newMap.Update();
-            loadMap.Update();
-            saveMap.Update();
             base.Update(gameTime);
         }
 

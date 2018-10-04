@@ -62,6 +62,11 @@ namespace TileMapEditor.MapThings
                 Globals.DrawOffset = new Vector2(Globals.DrawOffset.X + 1, Globals.DrawOffset.Y);
         }
 
+        public Rectangle GetTileImage()
+        {
+            return _selected;
+        }
+
         public void Update()
         {
             UpdateInput();
