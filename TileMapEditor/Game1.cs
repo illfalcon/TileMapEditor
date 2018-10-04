@@ -16,7 +16,7 @@ namespace TileMapEditor
         SpriteBatch spriteBatch;
         GameState state;
         Map map;
-
+        TileSet tileSet;
         //public static int mapHeight = 14;
         //public static int mapWidth = 100;
         //public static int tileHeight = 16;
@@ -51,6 +51,9 @@ namespace TileMapEditor
             Globals.DrawOffset = Vector2.Zero;
             state = GameState.Active;
             map = new Map();
+            tileSet = new TileSet();
+            Globals.LeftView = new Viewport(0, 0, 500, 600);
+            Globals.RightView = new Viewport(500, 0, 300, 600);
             base.Initialize();
         }
         
@@ -81,6 +84,7 @@ namespace TileMapEditor
             Texture2D loadMapButton = Content.Load<Texture2D>("load");
             Texture2D tileSheetTexture = Content.Load<Texture2D>("jungletileset");
             map.Initialize(50, 14, 16, 16, tileSheetTexture, loadMapButton, newMapButton);
+            tileSet.Initialize(tileSheetTexture, 16, 16, saveMapButton);
 
             newMap = new Button(newMapButton, new Vector2(20, Globals.ClientBounds.Y - newMapButton.Height));
             loadMap = new Button(loadMapButton, new Vector2(130, Globals.ClientBounds.Y - loadMapButton.Height));
@@ -121,6 +125,7 @@ namespace TileMapEditor
             }
 
             map.UpdateCamera();
+            tileSet.Update();
 
             newMap.Update();
             loadMap.Update();
@@ -130,15 +135,23 @@ namespace TileMapEditor
 
         protected override void Draw(GameTime gameTime)
         {
-            
-            GraphicsDevice.Clear(Color.FloralWhite);
+            Viewport original = graphics.GraphicsDevice.Viewport;
 
+            graphics.GraphicsDevice.Viewport = Globals.LeftView;
+            GraphicsDevice.Clear(Color.FloralWhite);
             spriteBatch.Begin();
             map.Draw(spriteBatch);
             newMap.Draw(spriteBatch);
             loadMap.Draw(spriteBatch);
             saveMap.Draw(spriteBatch);
             spriteBatch.End();
+
+            graphics.GraphicsDevice.Viewport = Globals.RightView;
+            spriteBatch.Begin();
+            tileSet.Draw(spriteBatch);
+            spriteBatch.End();
+
+            graphics.GraphicsDevice.Viewport = original;
 
             base.Draw(gameTime);
         }

@@ -20,7 +20,6 @@ namespace TileMapEditor.MapThings
         private Tile[,] _tiles;
         private Texture2D _solid;
         private Texture2D _empty;
-        private List<Rectangle> _tileSet;
         private TileManager _tileManager;
 
         public int Width { get { return _width; } } //in tiles
@@ -29,7 +28,6 @@ namespace TileMapEditor.MapThings
         public int TileHeight { get { return _tileHeight; } }
         public Tile[,] Tiles { get { return _tiles; } }
         public Texture2D TileSheet { get { return _tileSheet; } }
-        public List<Rectangle> TileSet { get { return _tileSet; } }
         public TileManager TileManager { get { return _tileManager; } }
 
         public void Initialize(int width, int height, int tileWidth, int tileHeight, Texture2D tileSet, Texture2D solid, Texture2D empty)
@@ -57,28 +55,34 @@ namespace TileMapEditor.MapThings
             Vector2 mouse;
             int mapMouseX;
             int mapMouseY;
+            Rectangle mouseRect;
+            Rectangle viewPort;
 
             MouseState curMouseState = Mouse.GetState();
-
-            if (curMouseState.LeftButton == ButtonState.Pressed)
+            mouseRect = new Rectangle(curMouseState.X, curMouseState.Y, 1, 1);
+            viewPort = new Rectangle(Globals.LeftView.X, Globals.LeftView.Y, Globals.LeftView.Width, Globals.LeftView.Height);
+            if (mouseRect.Intersects(viewPort))
             {
-                mouse = new Vector2(curMouseState.X, curMouseState.Y) + Camera.Position;
-                mapMouseX = (int)GetTileFromCoordinates(mouse.X, mouse.Y).X;
-                mapMouseY = (int)GetTileFromCoordinates(mouse.X, mouse.Y).Y;
-                if (mapMouseX < Width && mapMouseY < Height && mapMouseX >= 0 && mapMouseY >= 0)
+                if (curMouseState.LeftButton == ButtonState.Pressed)
                 {
-                    Tiles[mapMouseX, mapMouseY] = tile;
+                    mouse = new Vector2(curMouseState.X, curMouseState.Y) + Camera.Position;
+                    mapMouseX = (int)GetTileFromCoordinates(mouse.X, mouse.Y).X;
+                    mapMouseY = (int)GetTileFromCoordinates(mouse.X, mouse.Y).Y;
+                    if (mapMouseX < Width && mapMouseY < Height && mapMouseX >= 0 && mapMouseY >= 0)
+                    {
+                        Tiles[mapMouseX, mapMouseY] = tile;
+                    }
                 }
-            }
 
-            if (curMouseState.RightButton == ButtonState.Pressed)
-            {
-                mouse = new Vector2(curMouseState.X, curMouseState.Y) + Camera.Position;
-                mapMouseX = (int)GetTileFromCoordinates(mouse.X, mouse.Y).X;
-                mapMouseY = (int)GetTileFromCoordinates(mouse.X, mouse.Y).Y;
-                if (mapMouseX < Width && mapMouseY < Height && mapMouseX >= 0 && mapMouseY >= 0)
+                if (curMouseState.RightButton == ButtonState.Pressed)
                 {
-                    Tiles[mapMouseX, mapMouseY] = _tileManager.Tiles[0];
+                    mouse = new Vector2(curMouseState.X, curMouseState.Y) + Camera.Position;
+                    mapMouseX = (int)GetTileFromCoordinates(mouse.X, mouse.Y).X;
+                    mapMouseY = (int)GetTileFromCoordinates(mouse.X, mouse.Y).Y;
+                    if (mapMouseX < Width && mapMouseY < Height && mapMouseX >= 0 && mapMouseY >= 0)
+                    {
+                        Tiles[mapMouseX, mapMouseY] = _tileManager.Tiles[0];
+                    }
                 }
             }
         }
@@ -96,22 +100,6 @@ namespace TileMapEditor.MapThings
                 Camera.Position = new Vector2(Camera.Position.X - 1, Camera.Position.Y);
             if (keys.IsKeyDown(Keys.D))
                 Camera.Position = new Vector2(Camera.Position.X + 1, Camera.Position.Y);
-            //if (Camera.Position.X < Camera.MinX)
-            //{
-            //    Camera.Position.X = Camera.MinX;
-            //}
-            //if (Camera.Position.X > Camera.MaxX)
-            //{
-            //    Camera.Position.X = Camera.MaxX;
-            //}
-            //if (Camera.Position.Y < Camera.MinY)
-            //{
-            //    Camera.Position.Y = Camera.MinY;
-            //}
-            //if (Camera.Position.Y > Camera.MaxY)
-            //{
-            //    Camera.Position.Y = Camera.MaxY;
-            //}
         }
 
         public Vector2 GetTileFromCoordinates(float wX, float wY)
@@ -130,21 +118,7 @@ namespace TileMapEditor.MapThings
 
         public void LoadTileSet(Texture2D tileSheet)
         {
-            int tilesWide = tileSheet.Width / _tileWidth;
-            int tilesHigh = tileSheet.Height / _tileHeight;
-
-            Rectangle bounds;
-
-            _tileSet = new List<Rectangle>();
-
-            for (int i = 0; i < tilesWide; i++)
-            {
-                for (int j = 0; j < tilesHigh; j++)
-                {
-                    bounds = new Rectangle(i * _tileWidth, j * _tileHeight, _tileWidth, _tileHeight);
-                    _tileSet.Add(bounds);
-                }
-            }
+            
         }
         
         //public Tile GetTile(int x, int y)
@@ -159,16 +133,6 @@ namespace TileMapEditor.MapThings
         
         public void Draw(SpriteBatch spriteBatch)
         {
-            //int startCol = (int)GetTileFromCoordinates(Camera.Position.X, Camera.Position.Y).X;
-            //int startRow = (int)GetTileFromCoordinates(Camera.Position.X, Camera.Position.Y).Y;
-            //int endCol = (int)GetTileFromCoordinates(Camera.Position.X + Camera.Width, Camera.Position.Y).X;
-            //int endRow = (int)GetTileFromCoordinates(Camera.Position.X, Camera.Position.Y + Camera.Height).Y;
-            //
-            //if (endCol != _width)
-            //    endCol += 1;
-            //if (endRow != _height)
-            //    endRow += 1;
-        
             Vector2 offset = new Vector2( - Camera.Position.X, - Camera.Position.Y);
         
             for (int i = 0; i < Width; i++)
