@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System;
+using System.IO;
 using TileMapEditor.GUI;
 using TileMapEditor.Helpers;
 using TileMapEditor.MapThings;
@@ -50,7 +51,6 @@ namespace TileMapEditor
             Globals.DrawOffset = Vector2.Zero;
             state = GameState.Active;
             map = new Map();
-            tileSet = new TileSet();
             Globals.LeftView = new Viewport(0, 0, 500, 600);
             Globals.RightView = new Viewport(500, 0, 300, 600);
             base.Initialize();
@@ -71,6 +71,23 @@ namespace TileMapEditor
                     tileSet.Initialize(tileSheet, newMapForm.mapTileWidth, newMapForm.mapTileHeight, selectedImage);
                     map.LoadTileSet(tileSheet);
                 }
+            }
+            state = GameState.Active;
+        }
+
+        public void LoadTileSet()
+        {
+            LoadTileSetForm loadTileSet = new LoadTileSetForm();
+            state = GameState.Frozen;
+            loadTileSet.ShowDialog();
+            if (loadTileSet.DialogResult == System.Windows.Forms.DialogResult.OK)
+            {
+                FileStream setStream = File.Open(loadTileSet.fileName, FileMode.Open);
+                tileSheet = Texture2D.FromStream(graphics.GraphicsDevice, setStream);
+                setStream.Dispose();
+                map.LoadTileSet(tileSheet);
+                tileSet = new TileSet();
+                tileSet.Initialize(tileSheet, map.TileWidth, map.TileHeight, selectedImage);
             }
             state = GameState.Active;
         }
@@ -104,8 +121,6 @@ namespace TileMapEditor
             empty = Content.Load<Texture2D>("save");
             selectedImage = Content.Load<Texture2D>("load");
 
-            //tileSheet = Content.Load<Texture2D>("jungletileset");
-
             if (tileSheet != null)
                 tileSet.Initialize(tileSheet, 16, 16, selectedImage);
 
@@ -113,7 +128,7 @@ namespace TileMapEditor
             loadMap = new MyButton(loadMapButton, new Vector2(130, Globals.ClientBounds.Y - loadMapButton.Height));
             saveMap = new MyButton(saveMapButton, new Vector2(240, Globals.ClientBounds.Y - saveMapButton.Height));
             newMap.Click += OnNewMapClicked;
-            //loadMap.Click += LoadMapWindow;
+            loadMap.Click += LoadTileSet;
             //saveMap.Click += SaveMapWindow;
         }
 
@@ -151,7 +166,8 @@ namespace TileMapEditor
                 }
 
                 map.UpdateCamera();
-                tileSet.Update();
+                if (tileSet != null)
+                    tileSet.Update();
 
                 newMap.Update();
                 loadMap.Update();
@@ -175,7 +191,7 @@ namespace TileMapEditor
 
             graphics.GraphicsDevice.Viewport = Globals.RightView;
             spriteBatch.Begin();
-            if (tileSheet != null)
+            if (tileSet != null)
             {
                 tileSet.Draw(spriteBatch);
             }

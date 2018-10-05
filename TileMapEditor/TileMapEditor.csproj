@@ -58,6 +58,12 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Game1.cs" />
+    <Compile Include="GUI\LoadTileSetForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GUI\LoadTileSetForm.Designer.cs">
+      <DependentUpon>LoadTileSetForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="GUI\MyButton.cs" />
     <Compile Include="GUI\NewMapForm.cs">
       <SubType>Form</SubType>
@@ -103,6 +109,9 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="GUI\LoadTileSetForm.resx">
+      <DependentUpon>LoadTileSetForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="GUI\NewMapForm.resx">
       <DependentUpon>NewMapForm.cs</DependentUpon>
     </EmbeddedResource>
