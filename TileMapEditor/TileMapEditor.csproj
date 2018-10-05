@@ -58,7 +58,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Game1.cs" />
-    <Compile Include="GUI\Button.cs" />
+    <Compile Include="GUI\MyButton.cs" />
     <Compile Include="GUI\NewMapForm.cs">
       <SubType>Form</SubType>
     </Compile>

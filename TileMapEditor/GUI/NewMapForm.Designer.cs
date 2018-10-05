@@ -29,17 +29,17 @@
         private void InitializeComponent()
         {
             this.tileWidth = new System.Windows.Forms.NumericUpDown();
-            this.numericUpDown2 = new System.Windows.Forms.NumericUpDown();
+            this.tileHeight = new System.Windows.Forms.NumericUpDown();
             this.mapHeight = new System.Windows.Forms.NumericUpDown();
             this.mapWidth = new System.Windows.Forms.NumericUpDown();
             this.okButton = new System.Windows.Forms.Button();
             this.cancelButton = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
-            this.tileHeight = new System.Windows.Forms.Label();
+            this.label = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.tileWidth)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown2)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.tileHeight)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.mapHeight)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.mapWidth)).BeginInit();
             this.SuspendLayout();
@@ -56,13 +56,13 @@
             0,
             0});
             // 
-            // numericUpDown2
+            // tileHeight
             // 
-            this.numericUpDown2.Location = new System.Drawing.Point(238, 156);
-            this.numericUpDown2.Name = "numericUpDown2";
-            this.numericUpDown2.Size = new System.Drawing.Size(35, 20);
-            this.numericUpDown2.TabIndex = 1;
-            this.numericUpDown2.Value = new decimal(new int[] {
+            this.tileHeight.Location = new System.Drawing.Point(238, 156);
+            this.tileHeight.Name = "tileHeight";
+            this.tileHeight.Size = new System.Drawing.Size(35, 20);
+            this.tileHeight.TabIndex = 1;
+            this.tileHeight.Value = new decimal(new int[] {
             16,
             0,
             0,
@@ -100,6 +100,7 @@
             this.okButton.TabIndex = 2;
             this.okButton.Text = "OK";
             this.okButton.UseVisualStyleBackColor = true;
+            this.okButton.Click += new System.EventHandler(this.okButton_Click);
             // 
             // cancelButton
             // 
@@ -109,6 +110,7 @@
             this.cancelButton.TabIndex = 2;
             this.cancelButton.Text = "Cancel";
             this.cancelButton.UseVisualStyleBackColor = true;
+            this.cancelButton.Click += new System.EventHandler(this.cancelButton_Click);
             // 
             // label1
             // 
@@ -118,7 +120,6 @@
             this.label1.Size = new System.Drawing.Size(56, 13);
             this.label1.TabIndex = 3;
             this.label1.Text = "MapWidth";
-            this.label1.Click += new System.EventHandler(this.label1_Click);
             // 
             // label2
             // 
@@ -129,14 +130,14 @@
             this.label2.TabIndex = 3;
             this.label2.Text = "MapHeight";
             // 
-            // tileHeight
+            // label
             // 
-            this.tileHeight.AutoSize = true;
-            this.tileHeight.Location = new System.Drawing.Point(180, 158);
-            this.tileHeight.Name = "tileHeight";
-            this.tileHeight.Size = new System.Drawing.Size(55, 13);
-            this.tileHeight.TabIndex = 3;
-            this.tileHeight.Text = "TileHeight";
+            this.label.AutoSize = true;
+            this.label.Location = new System.Drawing.Point(180, 158);
+            this.label.Name = "label";
+            this.label.Size = new System.Drawing.Size(55, 13);
+            this.label.TabIndex = 3;
+            this.label.Text = "TileHeight";
             // 
             // label4
             // 
@@ -153,19 +154,19 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(405, 256);
             this.Controls.Add(this.label4);
-            this.Controls.Add(this.tileHeight);
+            this.Controls.Add(this.label);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.cancelButton);
             this.Controls.Add(this.okButton);
             this.Controls.Add(this.mapWidth);
             this.Controls.Add(this.mapHeight);
-            this.Controls.Add(this.numericUpDown2);
+            this.Controls.Add(this.tileHeight);
             this.Controls.Add(this.tileWidth);
             this.Name = "NewMapForm";
             this.Text = "NewMapForm";
             ((System.ComponentModel.ISupportInitialize)(this.tileWidth)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown2)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.tileHeight)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.mapHeight)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.mapWidth)).EndInit();
             this.ResumeLayout(false);
@@ -175,14 +176,14 @@
 
         #endregion
         private System.Windows.Forms.NumericUpDown tileWidth;
-        private System.Windows.Forms.NumericUpDown numericUpDown2;
+        private System.Windows.Forms.NumericUpDown tileHeight;
         private System.Windows.Forms.NumericUpDown mapHeight;
         private System.Windows.Forms.NumericUpDown mapWidth;
         private System.Windows.Forms.Button okButton;
         private System.Windows.Forms.Button cancelButton;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.Label tileHeight;
+        private System.Windows.Forms.Label label;
         private System.Windows.Forms.Label label4;
     }
 }

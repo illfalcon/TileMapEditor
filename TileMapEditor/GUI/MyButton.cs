@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace TileMapEditor.GUI
 {
-    public class Button
+    public class MyButton
     {
         private Texture2D _image;
         private bool _clicked;
@@ -19,7 +19,7 @@ namespace TileMapEditor.GUI
 
         public Action Click;
 
-        public Button(Texture2D image, Vector2 position)
+        public MyButton(Texture2D image, Vector2 position)
         {
             _image = image;
             _position = position;

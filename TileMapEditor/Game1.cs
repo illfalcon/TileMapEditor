@@ -17,22 +17,21 @@ namespace TileMapEditor
         GameState state;
         Map map;
         TileSet tileSet;
-        //public static int mapHeight = 14;
-        //public static int mapWidth = 100;
-        //public static int tileHeight = 16;
-        //public static int tileWidth = 16;
+        Texture2D solid;
+        Texture2D empty;
 
-        public static int selectedTileNo = 1;
+        public static int selectedTileNo = 0;
 
-        public static Texture2D tileSheet;
+        Texture2D tileSheet;
+        Texture2D selectedImage;
 
         MouseState mouse;
         KeyboardState prevState;
 
-        Button newMap;
-        Button saveMap;
-        Button loadMap;
-        Button newTile;
+        MyButton newMap;
+        MyButton saveMap;
+        MyButton loadMap;
+        MyButton newTile;
 
         public Game1()
         {
@@ -55,6 +54,25 @@ namespace TileMapEditor
             Globals.LeftView = new Viewport(0, 0, 500, 600);
             Globals.RightView = new Viewport(500, 0, 300, 600);
             base.Initialize();
+        }
+
+        public void OnNewMapClicked()
+        {
+            NewMapForm newMapForm = new NewMapForm();
+            state = GameState.Frozen;
+            newMapForm.ShowDialog();
+            if (newMapForm.DialogResult == System.Windows.Forms.DialogResult.OK)
+            {
+                map.Initialize(newMapForm.width, newMapForm.height, newMapForm.mapTileWidth, newMapForm.mapTileHeight, solid, empty);
+                selectedTileNo = 0;
+                Camera.Position = Vector2.Zero;
+                if (tileSheet != null)
+                {
+                    tileSet.Initialize(tileSheet, newMapForm.mapTileWidth, newMapForm.mapTileHeight, selectedImage);
+                    map.LoadTileSet(tileSheet);
+                }
+            }
+            state = GameState.Active;
         }
         
         //public void CreateNewMapWindow()
@@ -82,14 +100,19 @@ namespace TileMapEditor
             Texture2D newMapButton = Content.Load<Texture2D>("new");
             Texture2D saveMapButton = Content.Load<Texture2D>("save");
             Texture2D loadMapButton = Content.Load<Texture2D>("load");
-            Texture2D tileSheetTexture = Content.Load<Texture2D>("jungletileset");
-            map.Initialize(50, 14, 16, 16, tileSheetTexture, loadMapButton, newMapButton);
-            tileSet.Initialize(tileSheetTexture, 16, 16, saveMapButton);
+            solid = Content.Load<Texture2D>("load");
+            empty = Content.Load<Texture2D>("save");
+            selectedImage = Content.Load<Texture2D>("load");
 
-            newMap = new Button(newMapButton, new Vector2(20, Globals.ClientBounds.Y - newMapButton.Height));
-            loadMap = new Button(loadMapButton, new Vector2(130, Globals.ClientBounds.Y - loadMapButton.Height));
-            saveMap = new Button(saveMapButton, new Vector2(240, Globals.ClientBounds.Y - saveMapButton.Height));
-            //newMap.Click += CreateNewMapWindow;
+            //tileSheet = Content.Load<Texture2D>("jungletileset");
+
+            if (tileSheet != null)
+                tileSet.Initialize(tileSheet, 16, 16, selectedImage);
+
+            newMap = new MyButton(newMapButton, new Vector2(20, Globals.ClientBounds.Y - newMapButton.Height));
+            loadMap = new MyButton(loadMapButton, new Vector2(130, Globals.ClientBounds.Y - loadMapButton.Height));
+            saveMap = new MyButton(saveMapButton, new Vector2(240, Globals.ClientBounds.Y - saveMapButton.Height));
+            newMap.Click += OnNewMapClicked;
             //loadMap.Click += LoadMapWindow;
             //saveMap.Click += SaveMapWindow;
         }
@@ -101,7 +124,7 @@ namespace TileMapEditor
 
         protected override void Update(GameTime gameTime)
         {
-            if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
+            if (Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
 
             if (state == GameState.Active)
@@ -109,15 +132,15 @@ namespace TileMapEditor
 
                 KeyboardState keyState = Keyboard.GetState();
 
-                if (selectedTileNo < map.TileManager.Tiles.Length - 1)
+                if (map.TileManager != null && selectedTileNo < map.TileManager.Tiles.Length - 1)
                 {
                     if (keyState.IsKeyDown(Keys.Up) && !prevState.IsKeyDown(Keys.Up))
-                        selectedTileNo++;
+                        selectedTileNo--;
                 }
-                if (selectedTileNo > 1)
+                if (map.TileManager != null && selectedTileNo > 1)
                 {
                     if (keyState.IsKeyDown(Keys.Down) && !prevState.IsKeyDown(Keys.Down))
-                        selectedTileNo--;
+                        selectedTileNo++;
                 }
 
                 prevState = keyState;
@@ -152,7 +175,10 @@ namespace TileMapEditor
 
             graphics.GraphicsDevice.Viewport = Globals.RightView;
             spriteBatch.Begin();
-            tileSet.Draw(spriteBatch);
+            if (tileSheet != null)
+            {
+                tileSet.Draw(spriteBatch);
+            }
             spriteBatch.End();
 
             graphics.GraphicsDevice.Viewport = original;

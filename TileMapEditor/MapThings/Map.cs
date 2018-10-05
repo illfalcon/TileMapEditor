@@ -30,13 +30,12 @@ namespace TileMapEditor.MapThings
         public Texture2D TileSheet { get { return _tileSheet; } }
         public TileManager TileManager { get { return _tileManager; } }
 
-        public void Initialize(int width, int height, int tileWidth, int tileHeight, Texture2D tileSet, Texture2D solid, Texture2D empty)
+        public void Initialize(int width, int height, int tileWidth, int tileHeight, Texture2D solid, Texture2D empty)
         {
             _width = width;
             _height = height;
             _tileWidth = tileWidth;
             _tileHeight = tileHeight;
-            _tileSheet = tileSet;
             _tiles = new Tile[Width, Height];
             _solid = solid;
             _empty = empty;
@@ -118,7 +117,7 @@ namespace TileMapEditor.MapThings
 
         public void LoadTileSet(Texture2D tileSheet)
         {
-            
+            _tileSheet = tileSheet;
         }
         
         //public Tile GetTile(int x, int y)
