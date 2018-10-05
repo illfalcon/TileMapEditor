@@ -23,7 +23,7 @@ namespace TileMapEditor.Helpers
             }
         }
 
-        public void SaveMap(string fileName, int[,] idArray)
+        public void SaveTwoDimArray<T>(string fileName, T[,] idArray)
         {
             using (var sw = new StreamWriter(fileName))
             {

@@ -115,7 +115,7 @@ namespace TileMapEditor
         {
             var json = new JSONSerializer();
             json.SaveList<Tile>("Data/tiles.json", map.TileManager.Tiles);
-            json.SaveMap("Data/map.json", map.TileIds);
+            json.SaveTwoDimArray("Data/map.json", map.TileIds);
         }
         
         //public void CreateNewMapWindow()

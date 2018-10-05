@@ -84,6 +84,11 @@
             this.bottomRightCornerXBox.Name = "bottomRightCornerXBox";
             this.bottomRightCornerXBox.Size = new System.Drawing.Size(38, 20);
             this.bottomRightCornerXBox.TabIndex = 2;
+            this.bottomRightCornerXBox.Value = new decimal(new int[] {
+            16,
+            0,
+            0,
+            0});
             // 
             // bottomRightCornerYBox
             // 
@@ -91,6 +96,11 @@
             this.bottomRightCornerYBox.Name = "bottomRightCornerYBox";
             this.bottomRightCornerYBox.Size = new System.Drawing.Size(38, 20);
             this.bottomRightCornerYBox.TabIndex = 3;
+            this.bottomRightCornerYBox.Value = new decimal(new int[] {
+            16,
+            0,
+            0,
+            0});
             // 
             // isGroundCheckBox
             // 
