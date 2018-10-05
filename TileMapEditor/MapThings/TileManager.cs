@@ -11,13 +11,13 @@ namespace TileMapEditor.MapThings
     {
         private List<Tile> _tiles;
 
-        public Tile[] Tiles { get { return _tiles.ToArray(); } }
+        public List<Tile> Tiles { get { return _tiles; } }
 
         public TileManager()
         {
             _tiles = new List<Tile>();
             //0 empty
-            _tiles.Add(new Tile(isGround: false, isSolid: false, isEmpty: true, isOneWay: false, srcRect: Rectangle.Empty, colRect: Rectangle.Empty));
+            _tiles.Add(new Tile(isGround: false, isSolid: false, isEmpty: true, isOneWay: false, srcRect: Rectangle.Empty, colRect: Rectangle.Empty, id: 0));
         }
 
         public void AddTile(Tile tile)

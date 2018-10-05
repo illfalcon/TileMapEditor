@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System;
 using System.IO;
+using System.Windows;
 using TileMapEditor.GUI;
 using TileMapEditor.Helpers;
 using TileMapEditor.MapThings;
@@ -31,8 +32,7 @@ namespace TileMapEditor
 
         MyButton newMap;
         MyButton saveMap;
-        MyButton loadMap;
-        MyButton newTile;
+        MyButton loadTileSet;
 
         public Game1()
         {
@@ -100,12 +100,22 @@ namespace TileMapEditor
             addTileForm.ShowDialog();
             if (addTileForm.DialogResult == System.Windows.Forms.DialogResult.OK)
             {
-                Rectangle colRect = new Rectangle(0, 0, addTileForm.bottomRightCornerX - addTileForm.topLeftCornerX,
+                Rectangle colRect = new Rectangle(addTileForm.topLeftCornerX,
+                    addTileForm.topLeftCornerY,
+                    addTileForm.bottomRightCornerX - addTileForm.topLeftCornerX,
                     addTileForm.bottomRightCornerY - addTileForm.topLeftCornerY);
-                Tile newTile = new Tile(addTileForm.isGround, addTileForm.isSolid, addTileForm.isEmpty, addTileForm.isOneWay, tileSet.Selected, colRect);
+                int id = map.TileManager.Tiles.Count;
+                Tile newTile = new Tile(addTileForm.isGround, addTileForm.isSolid, addTileForm.isEmpty, addTileForm.isOneWay, tileSet.Selected, colRect, id);
                 map.TileManager.AddTile(newTile);
             }
             state = GameState.Active;
+        }
+
+        public void SaveMap()
+        {
+            var json = new JSONSerializer();
+            json.SaveList<Tile>("Data/tiles.json", map.TileManager.Tiles);
+            json.SaveMap("Data/map.json", map.TileIds);
         }
         
         //public void CreateNewMapWindow()
@@ -132,7 +142,7 @@ namespace TileMapEditor
 
             Texture2D newMapButton = Content.Load<Texture2D>("new");
             Texture2D saveMapButton = Content.Load<Texture2D>("save");
-            Texture2D loadMapButton = Content.Load<Texture2D>("load");
+            Texture2D loadTileSetButton = Content.Load<Texture2D>("load");
             solid = Content.Load<Texture2D>("load");
             empty = Content.Load<Texture2D>("save");
             selectedImage = Content.Load<Texture2D>("load");
@@ -141,11 +151,11 @@ namespace TileMapEditor
                 tileSet.Initialize(tileSheet, 16, 16, selectedImage);
 
             newMap = new MyButton(newMapButton, new Vector2(20, Globals.ClientBounds.Y - newMapButton.Height));
-            loadMap = new MyButton(loadMapButton, new Vector2(130, Globals.ClientBounds.Y - loadMapButton.Height));
+            loadTileSet = new MyButton(loadTileSetButton, new Vector2(130, Globals.ClientBounds.Y - loadTileSetButton.Height));
             saveMap = new MyButton(saveMapButton, new Vector2(240, Globals.ClientBounds.Y - saveMapButton.Height));
             newMap.Click += OnNewMapClicked;
-            loadMap.Click += LoadTileSet;
-            //saveMap.Click += SaveMapWindow;
+            loadTileSet.Click += LoadTileSet;
+            saveMap.Click += SaveMap;
         }
 
         protected override void UnloadContent()
@@ -168,7 +178,7 @@ namespace TileMapEditor
 
                 KeyboardState keyState = Keyboard.GetState();
 
-                if (map.TileManager != null && selectedTileNo < map.TileManager.Tiles.Length - 1)
+                if (map.TileManager != null && selectedTileNo < map.TileManager.Tiles.Count - 1)
                 {
                     if (keyState.IsKeyDown(Keys.Up) && !prevState.IsKeyDown(Keys.Up))
                         selectedTileNo++;
@@ -189,7 +199,7 @@ namespace TileMapEditor
                 map.UpdateCamera();
 
                 newMap.Update();
-                loadMap.Update();
+                loadTileSet.Update();
                 saveMap.Update();
             }
             base.Update(gameTime);
@@ -205,10 +215,10 @@ namespace TileMapEditor
             map.Draw(spriteBatch);
             if (tileSheet != null)
             {
-                spriteBatch.Draw(tileSheet, new Rectangle(Mouse.GetState().X, Mouse.GetState().Y, map.TileWidth, map.TileHeight), map.TileManager.Tiles[selectedTileNo].SourceRectangle, Color.White);
+                spriteBatch.Draw(tileSheet, new Rectangle(Mouse.GetState().X - map.TileWidth / 2, Mouse.GetState().Y - map.TileHeight / 2, map.TileWidth, map.TileHeight), map.TileManager.Tiles[selectedTileNo].SourceRectangle, Color.White);
             }
             newMap.Draw(spriteBatch);
-            loadMap.Draw(spriteBatch);
+            loadTileSet.Draw(spriteBatch);
             saveMap.Draw(spriteBatch);
             spriteBatch.End();
 

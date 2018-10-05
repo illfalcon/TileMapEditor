@@ -27,6 +27,7 @@ namespace TileMapEditor.MapThings
         public int TileWidth { get { return _tileWidth; } }
         public int TileHeight { get { return _tileHeight; } }
         public Tile[,] Tiles { get { return _tiles; } }
+        public int[,] TileIds { get; set; }
         public Texture2D TileSheet { get { return _tileSheet; } }
         public TileManager TileManager { get { return _tileManager; } }
 
@@ -37,6 +38,7 @@ namespace TileMapEditor.MapThings
             _tileWidth = tileWidth;
             _tileHeight = tileHeight;
             _tiles = new Tile[Width, Height];
+            TileIds = new int[Width, Height];
             _solid = solid;
             _empty = empty;
             _tileManager = new TileManager();
@@ -45,6 +47,7 @@ namespace TileMapEditor.MapThings
                 for (int j = 0; j < Height; j++)
                 {
                     _tiles[i, j] = _tileManager.Tiles[0];
+                    TileIds[i, j] = 0;
                 }
             }
         }
@@ -70,6 +73,7 @@ namespace TileMapEditor.MapThings
                     if (mapMouseX < Width && mapMouseY < Height && mapMouseX >= 0 && mapMouseY >= 0)
                     {
                         Tiles[mapMouseX, mapMouseY] = tile;
+                        TileIds[mapMouseX, mapMouseY] = tile.Id;
                     }
                 }
 
@@ -81,6 +85,7 @@ namespace TileMapEditor.MapThings
                     if (mapMouseX < Width && mapMouseY < Height && mapMouseX >= 0 && mapMouseY >= 0)
                     {
                         Tiles[mapMouseX, mapMouseY] = _tileManager.Tiles[0];
+                        TileIds[mapMouseX, mapMouseY] = 0;
                     }
                 }
             }

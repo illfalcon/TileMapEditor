@@ -9,6 +9,7 @@ namespace TileMapEditor.MapThings
 {
     public class Tile
     {
+        public int Id { get; set; }
         public Rectangle SourceRectangle { get; set; }
         public Rectangle CollisionRectangle { get; set; }
         public bool IsGround { get; set; }
@@ -16,7 +17,7 @@ namespace TileMapEditor.MapThings
         public bool IsEmpty { get; set; }
         public bool IsOneWay { get; set; }
 
-        public Tile(bool isGround, bool isSolid, bool isEmpty, bool isOneWay, Rectangle srcRect, Rectangle colRect)
+        public Tile(bool isGround, bool isSolid, bool isEmpty, bool isOneWay, Rectangle srcRect, Rectangle colRect, int id)
         {
             IsGround = isGround;
             IsSolid = isSolid;
@@ -24,6 +25,7 @@ namespace TileMapEditor.MapThings
             IsOneWay = isOneWay;
             SourceRectangle = srcRect;
             CollisionRectangle = colRect;
+            Id = id;
         }
     }
 }
