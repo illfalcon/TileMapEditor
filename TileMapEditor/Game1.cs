@@ -88,6 +88,22 @@ namespace TileMapEditor
                 map.LoadTileSet(tileSheet);
                 tileSet = new TileSet();
                 tileSet.Initialize(tileSheet, map.TileWidth, map.TileHeight, selectedImage);
+                tileSet.TileClicked += AddTile;
+            }
+            state = GameState.Active;
+        }
+
+        public void AddTile()
+        {
+            AddTile addTileForm = new AddTile();
+            state = GameState.Frozen;
+            addTileForm.ShowDialog();
+            if (addTileForm.DialogResult == System.Windows.Forms.DialogResult.OK)
+            {
+                Rectangle colRect = new Rectangle(0, 0, addTileForm.bottomRightCornerX - addTileForm.topLeftCornerX,
+                    addTileForm.bottomRightCornerY - addTileForm.topLeftCornerY);
+                Tile newTile = new Tile(addTileForm.isGround, addTileForm.isSolid, addTileForm.isEmpty, addTileForm.isOneWay, tileSet.Selected, colRect);
+                map.TileManager.AddTile(newTile);
             }
             state = GameState.Active;
         }
@@ -145,17 +161,22 @@ namespace TileMapEditor
             if (state == GameState.Active)
             {
 
+                if (tileSet != null)
+                {
+                    tileSet.Update();
+                }
+
                 KeyboardState keyState = Keyboard.GetState();
 
                 if (map.TileManager != null && selectedTileNo < map.TileManager.Tiles.Length - 1)
                 {
                     if (keyState.IsKeyDown(Keys.Up) && !prevState.IsKeyDown(Keys.Up))
-                        selectedTileNo--;
+                        selectedTileNo++;
                 }
                 if (map.TileManager != null && selectedTileNo > 1)
                 {
                     if (keyState.IsKeyDown(Keys.Down) && !prevState.IsKeyDown(Keys.Down))
-                        selectedTileNo++;
+                        selectedTileNo--;
                 }
 
                 prevState = keyState;
@@ -166,8 +187,6 @@ namespace TileMapEditor
                 }
 
                 map.UpdateCamera();
-                if (tileSet != null)
-                    tileSet.Update();
 
                 newMap.Update();
                 loadMap.Update();
@@ -184,6 +203,10 @@ namespace TileMapEditor
             GraphicsDevice.Clear(Color.FloralWhite);
             spriteBatch.Begin();
             map.Draw(spriteBatch);
+            if (tileSheet != null)
+            {
+                spriteBatch.Draw(tileSheet, new Rectangle(Mouse.GetState().X, Mouse.GetState().Y, map.TileWidth, map.TileHeight), map.TileManager.Tiles[selectedTileNo].SourceRectangle, Color.White);
+            }
             newMap.Draw(spriteBatch);
             loadMap.Draw(spriteBatch);
             saveMap.Draw(spriteBatch);

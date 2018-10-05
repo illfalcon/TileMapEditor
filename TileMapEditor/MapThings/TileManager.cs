@@ -17,7 +17,12 @@ namespace TileMapEditor.MapThings
         {
             _tiles = new List<Tile>();
             //0 empty
-            _tiles.Add(new Tile(tileType: TileType.Empty, isGround: false, isSolid: false, isEmpty: true, isOneWay: false, srcRect: Rectangle.Empty, colRect: Rectangle.Empty));
+            _tiles.Add(new Tile(isGround: false, isSolid: false, isEmpty: true, isOneWay: false, srcRect: Rectangle.Empty, colRect: Rectangle.Empty));
+        }
+
+        public void AddTile(Tile tile)
+        {
+            _tiles.Add(tile);
         }
     }
 }

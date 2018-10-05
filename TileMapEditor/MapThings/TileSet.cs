@@ -84,8 +84,12 @@ namespace TileMapEditor.MapThings
                 curMouseState.Y - Globals.RightView.Y > Globals.DrawOffset.Y)
             {
                 _selected = SelectImage(new Vector2(curMouseState.X, curMouseState.Y));
+                if (curMouseState.LeftButton == ButtonState.Pressed)
+                    TileClicked?.Invoke();
             }
         }
+
+        public Action TileClicked;
 
         public void Draw(SpriteBatch spriteBatch)
         {

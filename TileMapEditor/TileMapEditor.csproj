@@ -58,6 +58,12 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Game1.cs" />
+    <Compile Include="GUI\AddTile.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GUI\AddTile.Designer.cs">
+      <DependentUpon>AddTile.cs</DependentUpon>
+    </Compile>
     <Compile Include="GUI\LoadTileSetForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -109,6 +115,9 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="GUI\AddTile.resx">
+      <DependentUpon>AddTile.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="GUI\LoadTileSetForm.resx">
       <DependentUpon>LoadTileSetForm.cs</DependentUpon>
     </EmbeddedResource>
